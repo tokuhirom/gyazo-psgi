@@ -87,6 +87,11 @@ __DATA__
 </head>
 <body>
     <h1>gyzao on 64p.org</h1>
+    <h2>see also</h2>
+    <ul>
+        <li><a href="http://gyazo.com/">gyazo.com</a></li>
+        <li><a href="http://d.hatena.ne.jp/nvsofts/20090321/1237619040">gyazowin+</a></li>
+    </ul>
 </body>
 </html>
 
