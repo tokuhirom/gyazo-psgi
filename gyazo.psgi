@@ -91,6 +91,7 @@ __DATA__
     <ul>
         <li><a href="http://gyazo.com/">gyazo.com</a></li>
         <li><a href="http://d.hatena.ne.jp/nvsofts/20090321/1237619040">gyazowin+</a></li>
+        <li><a href="http://github.com/tokuhirom/gyazo-psgi">source of this site</a></li>
     </ul>
 </body>
 </html>
