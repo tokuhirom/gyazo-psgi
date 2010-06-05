@@ -28,13 +28,20 @@ my $app = sub {
             ];
         }
         when ('/upload') {
-            my $imagedata = $req->param('imagedata');
+            my $upload = $req->upload('imagedata')
+                or return [500, [], ['missing parameter: imagedata']];
+            my $imgpath = $upload->path
+                or return [500, [], ['missing parameter: imagedata']];
+            my $imagedata = do {
+                open my $fh, '<', $imgpath or die "cannot open temporary file";
+                do { local $/; <$fh> };
+            };
             my $path = md5_hex($imagedata) . '.png';
 
             # save
-            open my $fh, '>', "$datapath/$path" or die "cannot open file: $datapath/$path";
-            print {$fh} $imagedata;
-            close $fh;
+            open my $ofh, '>', "$datapath/$path" or die "cannot open file: $datapath/$path";
+            print {$ofh} $imagedata;
+            close $ofh;
 
             my $content = $req->base . 'image/' . $path;
             return [
@@ -62,6 +69,12 @@ my $app = sub {
             [404, [],[]];
         }
     }
+};
+
+builder {
+    enable_if( { $_[0]->{REMOTE_ADDR} eq '127.0.0.1' }
+        "Plack::Middleware::ReverseProxy" );
+    $app;
 };
 
 __DATA__
