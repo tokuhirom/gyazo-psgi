@@ -6,7 +6,7 @@ use Plack::Builder;
 use Digest::MD5 qw/md5_hex/;
 use Data::Section::Simple qw/get_data_section/;
 
-my $datapath = $ENV{GYAZO_DATA_PATH} || do {
+my $datapath = $ENV{GYAZO_DATA_DIR} || do {
     require File::Temp;
     File::Temp::tempdir(CLEANUP => 1);
 };
