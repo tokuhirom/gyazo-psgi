@@ -3,7 +3,6 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     NAME          => 'Gyazo',
     AUTHOR        => 'Some Person <person@example.com>',
-    VERSION_FROM  => 'lib/Gyazo.pm',
     PREREQ_PM     => {
         'Amon2'                           => '2.35',
         'Text::Xslate'                    => '1.1005',
