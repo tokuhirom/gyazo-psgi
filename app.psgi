@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use 5.12.1;
+use 5.010000;
 use Plack::Request;
 use Plack::Builder;
 use Digest::MD5 qw/md5_hex/;
