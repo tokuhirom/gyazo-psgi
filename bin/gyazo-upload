@@ -1,0 +1,33 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use 5.16.0;
+use LWP::UserAgent;
+use HTTP::Request::Common;
+use Pod::Usage;
+
+my $fname = shift or pod2usage();
+my $ua = LWP::UserAgent->new(
+    max_redirect => 0,
+);
+my $res = $ua->request(
+    POST(
+        'http://gyazo.64p.org/upload',
+        Content_Type => 'form-data',
+        Content => [
+            imagedata => [$fname]
+        ]
+    )
+);
+if ($res->code eq 302) {
+    say $res->header('Location');
+} else {
+    say $res->as_string;
+}
+
+__END__
+
+=head1 SYNOPSIS
+
+    % gyazo-upload fname
+

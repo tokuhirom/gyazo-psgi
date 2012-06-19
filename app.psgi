@@ -5,10 +5,11 @@ use Plack::Request;
 use Plack::Builder;
 use Digest::MD5 qw/md5_hex/;
 use Data::Section::Simple qw/get_data_section/;
+use File::Spec;
+use File::Basename;
 
 my $datapath = $ENV{GYAZO_DATA_DIR} || do {
-    require File::Temp;
-    File::Temp::tempdir(CLEANUP => 1);
+    File::Spec->rel2abs(File::Spec->catfile(dirname(__FILE__), 'var'));
 };
 die "missing datapath: $datapath" unless -d $datapath;
 
@@ -36,21 +37,22 @@ my $app = sub {
                 open my $fh, '<', $imgpath or die "cannot open temporary file";
                 do { local $/; <$fh> };
             };
-            my $path = md5_hex($imagedata) . '.png';
+            my $id = md5_hex($imagedata);
+            my $path = $id . '.png';
 
             # save
-            open my $ofh, '>', "$datapath/$path" or die "cannot open file: $datapath/$path";
+            open my $ofh, '>', "$datapath/$path" or die "cannot open file: $datapath/$path($!)";
             print {$ofh} $imagedata;
             close $ofh;
 
-            my $content = $req->base . 'image/' . $path;
+            my $url = $req->base . 'image/' . $path;
             return [
-                200,
+                302,
                 [
-                    'Content-Type'   => 'text/plain',
-                    'Content-Length' => length($content)
+                    Location => $url,
+                    'X-Gyazo-Id' => $id,
                 ],
-                [$content]
+                []
             ];
         }
         when (qr{^/image/([a-f0-9]+\.png)$}) {
@@ -74,6 +76,7 @@ my $app = sub {
 builder {
     enable_if { $_[0]->{REMOTE_ADDR} eq '127.0.0.1' }
         "Plack::Middleware::ReverseProxy";
+    enable 'AccessLog';
     $app;
 };
 
