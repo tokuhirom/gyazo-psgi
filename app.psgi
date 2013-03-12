@@ -47,12 +47,13 @@ my $app = sub {
 
             my $url = $req->base . 'image/' . $path;
             return [
-                302,
+                200,
                 [
-                    Location => $url,
+                    'Content-Type' => 'text/plain',
+                    'Content-Length' => length($url),
                     'X-Gyazo-Id' => $id,
                 ],
-                []
+                [$url]
             ];
         }
         when (qr{^/image/([a-f0-9]+\.png)$}) {
@@ -87,15 +88,26 @@ __DATA__
 <html>
 <head>
     <title>gyazo@64p.org</title>
+    <style>
+        footer {
+            font-size: 60%;
+        }
+    </style>
 </head>
 <body>
-    <h1>gyzao on 64p.org</h1>
-    <h2>see also</h2>
+    <h1>gyazo on 64p.org</h1>
+    <h2>Downloads</h2>
     <ul>
-        <li><a href="http://gyazo.com/">gyazo.com</a></li>
-        <li><a href="http://d.hatena.ne.jp/nvsofts/20090321/1237619040">gyazowin+</a></li>
-        <li><a href="http://github.com/tokuhirom/gyazo-psgi">source of this site</a></li>
+        <li><a href="/static/apps/G64.zip">for OSX</a></li>
     </ul>
+    <footer>
+        <h2>see also</h2>
+        <ul>
+            <li><a href="http://gyazo.com/">gyazo.com</a></li>
+            <li><a href="http://d.hatena.ne.jp/nvsofts/20090321/1237619040">gyazowin+</a></li>
+            <li><a href="http://github.com/tokuhirom/gyazo-psgi">source of this site</a></li>
+        </ul>
+    </footer>
 </body>
 </html>
 

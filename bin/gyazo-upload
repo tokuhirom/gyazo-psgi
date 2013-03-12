@@ -19,8 +19,8 @@ my $res = $ua->request(
         ]
     )
 );
-if ($res->code eq 302) {
-    say $res->header('Location');
+if ($res->code eq 200) {
+    say $res->content;
 } else {
     say $res->as_string;
 }
